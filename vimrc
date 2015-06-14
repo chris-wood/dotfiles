@@ -1,4 +1,6 @@
 :set tabstop=4
+:set shiftwidth=4
+:set expandtab
 :set nu
 :set binary
 :set noeol
@@ -13,5 +15,5 @@
 :set gdefault
 :set incsearch
 :set title
-
+set expandtab
 
