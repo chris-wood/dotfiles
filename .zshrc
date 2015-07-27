@@ -29,6 +29,7 @@ alias apt-get="sudo apt-get"
 alias aptitude="sudo aptitude"
 alias ssh="ssh -A -X"
 alias l="ls -l"
+alias m="more"
 
 bindkey -v
 bindkey '^e' insert-last-word
