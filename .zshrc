@@ -29,6 +29,7 @@ alias apt-get="sudo apt-get"
 alias aptitude="sudo aptitude"
 alias ssh="ssh -A -X"
 alias l="ls -l"
+alias g="git"
 alias m="more"
 
 bindkey -v
@@ -120,3 +121,21 @@ case `hostname` in
   ;;
   *) # Generic host
 esac
+
+setopt PROMPT_SUBST
+PROMPT='%B%F{red}%n@%m%f%F{yellow}[%D{%L:%M:%S}]%f:%F{blue}${${(%):-%~}}%f$ %b'
+TMOUT=1
+
+TRAPALRM() {
+    zle reset-prompt
+}
+
+# Display the time in the upper-right hand corner
+#while sleep 1;
+#do 
+#    tput sc
+#    tput cup 0 $(($(tput cols)-11));
+#    echo -e "\e[31m`date +%r`\e[39m";
+#    tput rc;
+#done &
+
