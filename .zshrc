@@ -1,4 +1,4 @@
-#caw's zshrc -- borrowed from Nacho Solis
+#caw's zshrc -- extended from Nacho Solis
 
 #####################################################
 # Define variables to be exported
@@ -122,11 +122,24 @@ case `hostname` in
   *) # Generic host
 esac
 
+CURRENT_BRANCH=""
+function listBranch () { 
+    currentbranch=`git status 2>&1 | grep 'fatal'`
+    # check to see if we failed to find a branch
+    if [ "$currentbranch" != "" ]; then 
+        CURRENT_BRANCH=""
+    else
+        CURRENT_BRANCH=`git status | grep 'On branch' | awk '{print $3}'`
+        CURRENT_BRANCH="[$CURRENT_BRANCH]"
+    fi
+}
+
 setopt PROMPT_SUBST
-PROMPT='%B%F{red}%n@%m%f%F{yellow}[%D{%L:%M:%S}]%f:%F{blue}${${(%):-%~}}%f$ %b'
+PROMPT='%B%F{red}%n@%m%f%F{magenta}[%D{%L:%M:%S}]%f:%F{blue}${${(%):-%~}}%F{grey}${CURRENT_BRANCH}%f$ %b '
 TMOUT=1
 
 TRAPALRM() {
+    listBranch
     zle reset-prompt
 }
 
