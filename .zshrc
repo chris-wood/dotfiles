@@ -32,7 +32,7 @@ alias l="ls -l"
 alias g="git"
 alias m="more"
 
-bindkey -v
+#bindkey -v
 bindkey '^e' insert-last-word
 bindkey -a q push-line-or-edit
 bindkey '^x' history-beginning-search-backward
@@ -55,11 +55,28 @@ colors
 
 ########################################################
 # Lets set the prompt
-PS1="%{$fg[cyan]%}[%{$fg[default]%}%n%{$fg[cyan]%}@%{$fg[default]%}%m%{$fg[cyan]%}:%{$fg[default]%}%~%{$fg[cyan]%}]%(!.#.$)%{$fg[default]%} "
-alias nshortprompt="export PS1=\"[%m:%1~]%(!.#.$) \""
-alias nnormalprompt="export PS1=\"[%n@%m:%~]%(!.#.$) \""
-#export PS1="[%n@%m:%~]%(!.#.$) "
-#export PS1="[%n@%m:%1~]%(!.#.$) "
+CURRENT_BRANCH=""
+function listBranch () { 
+    currentbranch=`git status 2>&1 | grep 'fatal'`
+    # check to see if we failed to find a branch
+    if [ "$currentbranch" != "" ]; then 
+        CURRENT_BRANCH=""
+    else
+        CURRENT_BRANCH=`git status | grep 'On branch' | awk '{print $3}'`
+        CURRENT_BRANCH="◀ $CURRENT_BRANCH ▶"
+    fi
+    echo $CURRENT_BRANCH
+}
+
+setopt PROMPT_SUBST
+#PROMPT="%{$fg[cyan]%}[%{$fg[default]%}%n%{$fg[cyan]%}@%{$fg[default]%}%m%{$fg[cyan]%}:%{$fg[default]%}%~%{$fg[cyan]%}]%{$fg[black]%}|${CURRENT_BRANCH}|%(!.#.$)%{$fg[default]%} "
+alias nshortprompt="export PROMPT=\"[%m:%1~]%(!.#.$) \""
+alias nnormalprompt="export PROMPT=\"[%n@%m:%~]%(!.#.$) \""
+
+PROMPT='%B%F{cyan}[%f%F{grey}%n@%m%f:%F{red}${${(%):-%~}}%F{cyan}]%B%F{blue}$(listBranch)%f ✗%b '
+
+autoload -U promptinit
+promptinit
 
 ########################################################
 # Lets define some of those neat functions
@@ -122,26 +139,7 @@ case `hostname` in
   *) # Generic host
 esac
 
-CURRENT_BRANCH=""
-function listBranch () { 
-    currentbranch=`git status 2>&1 | grep 'fatal'`
-    # check to see if we failed to find a branch
-    if [ "$currentbranch" != "" ]; then 
-        CURRENT_BRANCH=""
-    else
-        CURRENT_BRANCH=`git status | grep 'On branch' | awk '{print $3}'`
-        CURRENT_BRANCH="[$CURRENT_BRANCH]"
-    fi
-}
 
-setopt PROMPT_SUBST
-PROMPT='%B%F{red}%n@%m%f%F{magenta}[%D{%L:%M:%S}]%f:%F{blue}${${(%):-%~}}%F{grey}${CURRENT_BRANCH}%f$ %b '
-TMOUT=1
-
-TRAPALRM() {
-    listBranch
-    zle reset-prompt
-}
 
 # Display the time in the upper-right hand corner
 #while sleep 1;
