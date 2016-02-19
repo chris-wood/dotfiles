@@ -11,18 +11,19 @@ export PATH=$PATH:/Users/isolis/dev/local/bin
 export EDITOR=vim
 export CVS_RSH=ssh
 
-export ANDROID_SDK=/Users/dev/android-sdk-macosx
-export PATH=$PATH:${ANDROID_SDK}/tools
-export PATH=$PATH:${ANDROID_SDK}/platform-tools
-#export ANDROID_NDK=/Users/dev/android-ndk-r4b
-
 #export LC_CTYPE=en_US
 
 #####################################################
+replaceinplace() {
+    grep -l "$2" $1 | xargs -n 1 perl -pi -e "s/$2/$3/g"
+}
+
 # now let's define some aliases
 alias vi="vim"
 alias nprintcode="enscript -2 -C -E -G -j -r"
 alias nprinttext="enscript -2 -G -j -r"
+alias printrfc="enscript -2rG -p - --line-numbers --color=1 -c $1 > out.ps && open out.ps"
+alias rip=replaceinplace
 alias mp="mplayer -idx -fs"
 alias syncdir="rsync -Wtrv --size-only"
 alias apt-get="sudo apt-get"
@@ -138,7 +139,6 @@ case `hostname` in
   ;;
   *) # Generic host
 esac
-
 
 
 # Display the time in the upper-right hand corner
