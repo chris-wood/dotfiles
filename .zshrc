@@ -17,6 +17,14 @@ export CVS_RSH=ssh
 replaceinplace() {
     grep -l "$2" $1 | xargs -n 1 perl -pi -e "s/$2/$3/g"
 }
+moreprime() {
+    PYGMENT="pygmentize"
+    if [ -x "$(command -v ${PYGMENT})" ]; then
+        ${PYGMENT} $1
+    else
+        more $1
+    fi
+}
 
 # now let's define some aliases
 alias vi="vim"
@@ -32,6 +40,7 @@ alias ssh="ssh -A -X"
 alias l="ls -l"
 alias g="git"
 alias m="more"
+alias more=moreprime
 
 #bindkey -v
 bindkey '^e' insert-last-word
