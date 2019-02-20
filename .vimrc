@@ -15,5 +15,4 @@
 :set gdefault
 :set incsearch
 :set title
-set expandtab
-
+:set expandtab
